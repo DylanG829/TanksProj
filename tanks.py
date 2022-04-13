@@ -9,7 +9,7 @@ display_height = 600
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 
-pygame.display.set_caption('Tanks - Brought To You By Dylan Goldberg')
+pygame.display.set_caption('Tanks - By Dylan Goldberg')
 
 clock = pygame.time.Clock()
 
@@ -114,7 +114,7 @@ def score(score):
 
 # function for tank1, turrent positions
 
-def tank1(x, y, turpos):
+def tank1(x, y, turPos):
     x = int(x)
     y = int(y)
 
@@ -132,7 +132,7 @@ def tank1(x, y, turpos):
     pygame.draw.circle(gameDisplay, blue, (x, y), int(tankHeight / 2))
     pygame.draw.rect(gameDisplay, blue, (x - tankHeight, y, tankWidth, tankHeight))
 
-    pygame.draw.line(gameDisplay, blue, (x, y), possibleTurrets[turpos])
+    pygame.draw.line(gameDisplay, blue, (x, y), possibleTurrets[turPos])
 
     pygame.draw.circle(gameDisplay, blue, (x - 15, y + 20), wheelWidth)
     pygame.draw.circle(gameDisplay, blue, (x - 10, y + 20), wheelWidth)
@@ -145,11 +145,11 @@ def tank1(x, y, turpos):
     pygame.draw.circle(gameDisplay, blue, (x + 10, y + 20), wheelWidth)
     pygame.draw.circle(gameDisplay, blue, (x + 15, y + 20), wheelWidth)
 
-    return possibleTurrets[turpos]
+    return possibleTurrets[turPos]
 
 
 # function for tank2, turrent positions
-def tank2(x, y, turpos):
+def tank2(x, y, turPos):
     x = int(x)
     y = int(y)
 
@@ -167,7 +167,7 @@ def tank2(x, y, turpos):
     pygame.draw.circle(gameDisplay, blue, (x, y), int(tankHeight / 2))
     pygame.draw.rect(gameDisplay, blue, (x - tankHeight, y, tankWidth, tankHeight))
 
-    pygame.draw.line(gameDisplay, blue, (x, y), possibleTurrets[turpos])
+    pygame.draw.line(gameDisplay, blue, (x, y), possibleTurrets[turPos])
 
     pygame.draw.circle(gameDisplay, blue, (x - 15, y + 20), wheelWidth)
     pygame.draw.circle(gameDisplay, blue, (x - 10, y + 20), wheelWidth)
@@ -180,7 +180,7 @@ def tank2(x, y, turpos):
     pygame.draw.circle(gameDisplay, blue, (x + 10, y + 20), wheelWidth)
     pygame.draw.circle(gameDisplay, blue, (x + 15, y + 20), wheelWidth)
 
-    return possibleTurrets[turpos]
+    return possibleTurrets[turPos]
 
 
 # control screen
@@ -263,7 +263,8 @@ def barrier(xlocation, randomHeight, barrier_width):
     pygame.draw.rect(gameDisplay, green, [xlocation, display_height - randomHeight, barrier_width, randomHeight])
 
 
-# ---------------------------function for explosion for both tanks---------------------------------------
+
+#function for explosion for both tanks
 def explosion(x, y, size=50):
     explode = True
 
@@ -273,7 +274,6 @@ def explosion(x, y, size=50):
                 pygame.quit()
                 quit()
 
-        startPoint = x, y
 
         colorChoices = [red, light_red, yellow, light_yellow]
 
@@ -293,8 +293,8 @@ def explosion(x, y, size=50):
         explode = False
 
 
-# Firing function for tanks
-def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, randomHeight, tank2X, tank2Y):
+# Firing function for tank1
+def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, randomHeight, tank2x, tank2y):
     fire = True
     damage = 0
 
@@ -321,16 +321,16 @@ def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, ran
             hit_y = int(display_height - ground_height)
             print("Impact:", hit_x, hit_y)
 
-            if tank2X + 10 > hit_x > tank2X - 10:
+            if tank2x + 10 > hit_x > tank2x - 10:
                 print("Critical Hit!")
                 damage = 25
-            elif tank2X + 15 > hit_x > tank2X - 15:
+            elif tank2x + 15 > hit_x > tank2x - 15:
                 print("Hard Hit!")
                 damage = 18
-            elif tank2X + 25 > hit_x > tank2X - 25:
+            elif tank2x + 25 > hit_x > tank2x - 25:
                 print("Medium Hit")
                 damage = 10
-            elif tank2X + 35 > hit_x > tank2X - 35:
+            elif tank2x + 35 > hit_x > tank2x - 35:
                 print("Light Hit")
                 damage = 5
 
@@ -355,57 +355,14 @@ def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, ran
         clock.tick(60)
     return damage
 
+# firing function for tank2
 
-# trying something
-
-def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, randomHeight, ptankx, ptanky):
-    damage = 0
-    currentPower = 1
-    power_found = False
-
-    while not power_found:
-        currentPower += 1
-        if currentPower > 100:
-            power_found = True
-
-        fire = True
-        startingShell = list(xy)
-
-        while fire:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-
-            # pygame.draw.circle(gameDisplay, red, (startingShell[0],startingShell[1]),5)
-
-            startingShell[0] += (12 - turPos) * 2
-            startingShell[1] += int(
-                (((startingShell[0] - xy[0]) * 0.015 / (currentPower / 50)) ** 2) - (turPos + turPos / (12 - turPos)))
-
-            if startingShell[1] > display_height - ground_height:
-                hit_x = int((startingShell[0] * display_height - ground_height) / startingShell[1])
-                hit_y = int(display_height - ground_height)
-                # explosion(hit_x,hit_y)
-                if ptankx + 15 > hit_x > ptankx - 15:
-                    print("target acquired!")
-                    power_found = True
-                fire = False
-
-            check_x_1 = startingShell[0] <= xlocation + barrier_width
-            check_x_2 = startingShell[0] >= xlocation
-
-            check_y_1 = startingShell[1] <= display_height
-            check_y_2 = startingShell[1] >= display_height - randomHeight
-
-            if check_x_1 and check_x_2 and check_y_1 and check_y_2:
-                hit_x = int((startingShell[0]))
-                hit_y = int(startingShell[1])
-                # explosion(hit_x,hit_y)
-                fire = False
-
+def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, randomHeight, tank1x, tank1y):
     fire = True
+    damage = 0
+
     startingShell = list(xy)
+
     print("FIRE!", xy)
 
     while fire:
@@ -413,35 +370,32 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        # fn1353
-        # print(startingShell[0],startingShell[1])
+
         pygame.draw.circle(gameDisplay, red, (startingShell[0], startingShell[1]), 5)
 
+        #Makes it shoot right!
+        #Makes it shoot right!
         startingShell[0] += (12 - turPos) * 2
-
-        # y = x**2
-
-        gun_power = random.randrange(int(currentPower * 0.90), int(currentPower * 1.10))
 
         startingShell[1] += int(
             (((startingShell[0] - xy[0]) * 0.015 / (gun_power / 50)) ** 2) - (turPos + turPos / (12 - turPos)))
 
-        if startingShell[1] > display_height - ground_height:
-            print("last shell:", startingShell[0], startingShell[1])
+        if startingShell[1] > display_height + ground_height:
+            print("Last shell:", startingShell[0], startingShell[1])
             hit_x = int((startingShell[0] * display_height - ground_height) / startingShell[1])
             hit_y = int(display_height - ground_height)
             print("Impact:", hit_x, hit_y)
 
-            if ptankx + 10 > hit_x > ptankx - 10:
+            if tank1x + 10 > hit_x > tank1x - 10:
                 print("Critical Hit!")
                 damage = 25
-            elif ptankx + 15 > hit_x > ptankx - 15:
+            elif tank1x + 15 > hit_x > tank1x - 15:
                 print("Hard Hit!")
                 damage = 18
-            elif ptankx + 25 > hit_x > ptankx - 25:
+            elif tank1x + 25 > hit_x > tank1x - 25:
                 print("Medium Hit")
                 damage = 10
-            elif ptankx + 35 > hit_x > ptankx - 35:
+            elif tank1x + 35 > hit_x > tank1x - 35:
                 print("Light Hit")
                 damage = 5
 
@@ -450,9 +404,10 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
 
         check_x_1 = startingShell[0] <= xlocation + barrier_width
         check_x_2 = startingShell[0] >= xlocation
+        print(str(startingShell[0]) + " " + str(startingShell[1]))
 
         check_y_1 = startingShell[1] <= display_height
-        check_y_2 = startingShell[1] >= display_height - randomHeight
+        check_y_2 = startingShell[1] >= display_height + randomHeight
 
         if check_x_1 and check_x_2 and check_y_1 and check_y_2:
             print("Last shell:", startingShell[0], startingShell[1])
@@ -543,6 +498,7 @@ def health_bars(player_health, player2_health):
 
 # game loop
 def gameLoop():
+    global enemy_gun, gun
     gameExit = False
     gameOver = False
     FPS = 15
@@ -564,8 +520,8 @@ def gameLoop():
     fire_power = 50
     power_change = 0
 
-    xlocation = (display_width / 2) + random.randint(-0.1 * display_width, 0.1 * display_width)
-    randomHeight = random.randrange(display_height * 0.1, display_height * 0.6)
+    xlocation = (display_width / 2.0) + random.randint((-1.0/10) * display_width, (1.0/10) * display_width)
+    randomHeight = random.randrange(display_height * (1.0/10), display_height * (3.0/5))
 
     while not gameExit:
 
@@ -634,6 +590,7 @@ def gameLoop():
                             power(fire_power)
 
                             barrier(xlocation, randomHeight, barrier_width)
+                            print(str(xlocation) + " " + str(display_height))
                             gameDisplay.fill(green,
                                              rect=[0, display_height - ground_height, display_width, ground_height])
                             pygame.display.update()
