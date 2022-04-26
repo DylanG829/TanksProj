@@ -313,7 +313,7 @@ def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, ran
         startingShell[0] -= (12 - turPos) * 2
 
         startingShell[1] += int(
-            (((startingShell[0] - xy[0]) * 0.015 / (gun_power / 50)) ** 2) - (turPos + turPos / (12 - turPos)))
+            (((startingShell[0] - xy[0]) * 0.015 / (gun_power / 50.0)) ** 2) - (turPos + turPos / (12.0 - turPos)))
 
         if startingShell[1] > display_height - ground_height:
             print("Last shell:", startingShell[0], startingShell[1])
@@ -501,21 +501,21 @@ def gameLoop():
     global enemy_gun, gun
     gameExit = False
     gameOver = False
-    FPS = 15
+    FPS = 25
 
     player_health = 100
     player2_health = 100
 
     barrier_width = 50
 
-    mainTankX = display_width * 0.9
-    mainTankY = display_height * 0.9
+    mainTankX = display_width * .9
+    mainTankY = display_height * .9
     tankMove = 0
     currentTurPos = 0
     changeTur = 0
 
-    tank2X = display_width * 0.1
-    tank2Y = display_height * 0.9
+    tank2X = display_width * .1
+    tank2Y = display_height * .9
 
     fire_power = 50
     power_change = 0
@@ -525,11 +525,11 @@ def gameLoop():
 
     while not gameExit:
 
-        if gameOver == True:
+        if gameOver is True:
             message_to_screen("Game Over", red, -50, size="large")
             message_to_screen("Press C to play again or Q to exit", black, 50)
             pygame.display.update()
-            while gameOver == True:
+            while gameOver is True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         gameExit = True
