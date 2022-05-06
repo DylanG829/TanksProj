@@ -181,8 +181,6 @@ def tank2(x, y, turPos):
     pygame.draw.circle(gameDisplay, blue, (x + 15, y + 20), wheelWidth)
 
     return possibleTurrets[turPos]
-
-
 # control screen
 def game_controls():
     control = True
@@ -258,7 +256,7 @@ def pause():
         clock.tick(5)
 
 
-# function for barrior
+# function for barrier
 def barrier(xlocation, randomHeight, barrier_width):
     pygame.draw.rect(gameDisplay, green, [xlocation, display_height - randomHeight, barrier_width, randomHeight])
 
@@ -356,7 +354,6 @@ def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, ran
     return damage
 
 # firing function for tank2
-
 def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, randomHeight, tank1x, tank1y):
     fire = True
     damage = 0
@@ -378,8 +375,7 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
         startingShell[0] += (12 - turPos) * 2
 
         startingShell[1] += int(
-            (((startingShell[0] - xy[0]) * 0.015 / (gun_power / 50)) ** 2) - (turPos + turPos / (12 - turPos)))
-
+            (((startingShell[0] - xy[0]) * 0.015 / (gun_power / 50.0)) ** 2) - (turPos + turPos / (12.0 - turPos)))
         if startingShell[1] > display_height + ground_height:
             print("Last shell:", startingShell[0], startingShell[1])
             hit_x = int((startingShell[0] * display_height - ground_height) / startingShell[1])
@@ -404,10 +400,12 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
 
         check_x_1 = startingShell[0] <= xlocation + barrier_width
         check_x_2 = startingShell[0] >= xlocation
-        print(str(startingShell[0]) + " " + str(startingShell[1]))
 
         check_y_1 = startingShell[1] <= display_height
-        check_y_2 = startingShell[1] >= display_height + randomHeight
+        check_y_2 = startingShell[1] >= display_height - randomHeight
+        print(str(startingShell[0]) + " " + str(startingShell[1]))
+
+
 
         if check_x_1 and check_x_2 and check_y_1 and check_y_2:
             print("Last shell:", startingShell[0], startingShell[1])
@@ -516,6 +514,7 @@ def gameLoop():
 
     tank2X = display_width * .1
     tank2Y = display_height * .9
+    tank2TurPos = 0
 
     fire_power = 50
     power_change = 0
@@ -583,7 +582,7 @@ def gameLoop():
 
                             gameDisplay.fill(black)
                             health_bars(player_health, player2_health)
-                            gun = tank1(mainTankX, mainTankY, 8)
+                            gun = tank1(mainTankX, mainTankY, currentTurPos)
                             gun2 = tank2(tank2X, tank2Y, 8)
                             fire_power += power_change
 
@@ -591,13 +590,12 @@ def gameLoop():
 
                             barrier(xlocation, randomHeight, barrier_width)
                             print(str(xlocation) + " " + str(display_height))
-                            gameDisplay.fill(green,
-                                             rect=[0, display_height - ground_height, display_width, ground_height])
+                            gameDisplay.fill(green, rect=[0, display_height - ground_height, display_width, ground_height])
                             pygame.display.update()
 
                             clock.tick(FPS)
 
-                    damage = e_fireShell(gun2, tank2X, tank2Y, 8, 50, xlocation, barrier_width,
+                    damage = e_fireShell(gun2, tank2X, tank2Y, 7, 89, xlocation, barrier_width,
                                          randomHeight, mainTankX, mainTankY)
                     player_health -= damage
 
@@ -630,7 +628,7 @@ def gameLoop():
 
         gameDisplay.fill(black)
         health_bars(player_health, player2_health)
-        gun = tank1(mainTankX, mainTankY, 8)
+        gun = tank1(mainTankX, mainTankY, currentTurPos)
         gun2 = tank2(tank2X, tank2Y, 8)
 
         fire_power += power_change
