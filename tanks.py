@@ -30,6 +30,7 @@ light_yellow = (255, 255, 0)
 green = (34, 177, 76)
 light_green = (0, 255, 0)
 
+
 # tanks dementions
 tankWidth = 40
 tankHeight = 20
@@ -93,9 +94,9 @@ def startup():
         gameDisplay.fill(black)
         message_to_screen("Welcome to Tanks!", white, -100, size="large")
         message_to_screen("The objective is to shoot and destroy", cyan, 15)
-        message_to_screen("the enemy tank before they destroy you.", cyan, 60)
+        message_to_screen("All Black People Known to man Kind.", cyan, 60)
         message_to_screen("The more enemies you destroy, the harder they get.", cyan, 110)
-        message_to_screen("Brought To You by :- Dylan Goldberg", cyan, 280)
+        message_to_screen("Brought To You by: Dylan Goldberg", cyan, 280)
 
         button("Play", 150, 500, 100, 50, green, light_green, action="play", size="vsmall")
         button("Controls", 350, 500, 100, 50, yellow, light_yellow, action="controls", size="vsmall")
@@ -595,7 +596,13 @@ def gameLoop():
 
                             clock.tick(FPS)
 
-                    damage = e_fireShell(gun2, tank2X, tank2Y, 7, 89, xlocation, barrier_width,
+                    turposcom = [7, 8, 8, 8]
+                    turpos2 = random.choice(turposcom)
+
+                    comtankacc = [95, 93, 94, 88, 100, 100, 91, 78, 72, 75, 78, 80, 82, 85, 88, 90, 92, 100]
+                    fire_power2 = random.choice(comtankacc)
+
+                    damage = e_fireShell(gun2, tank2X, tank2Y, turpos2, fire_power2, xlocation, barrier_width,
                                          randomHeight, mainTankX, mainTankY)
                     player_health -= damage
 
